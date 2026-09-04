@@ -8,10 +8,17 @@ from app.schemas.auth import (
     RegisterRequest,
     RegisterResponse,
     LoginRequest,
+    RefreshRequest,
+    LogoutRequest,
     TokenResponse,
     UserResponse,
 )
-from app.services.auth_service import register_user, authenticate_user
+from app.services.auth_service import (
+    register_user,
+    authenticate_user,
+    refresh_access_token,
+    logout_user,
+)
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -28,6 +35,17 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
 @router.post("/login", response_model=TokenResponse)
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     return authenticate_user(request.email, request.password, db)
+
+
+@router.post("/refresh", response_model=TokenResponse)
+def refresh(request: RefreshRequest, db: Session = Depends(get_db)):
+    return refresh_access_token(request.refresh_token, db)
+
+
+@router.post("/logout", status_code=200)
+def logout(request: LogoutRequest, db: Session = Depends(get_db)):
+    logout_user(request.refresh_token, db)
+    return {"message": "Logged out successfully"}
 
 
 @router.get("/me", response_model=UserResponse)

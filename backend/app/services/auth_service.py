@@ -1,9 +1,19 @@
+from datetime import datetime, timedelta, timezone
+
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 
-from app.models.user import User
+from app.core.config import settings
+from app.core.security import (
+    hash_password,
+    verify_password,
+    create_access_token,
+    generate_refresh_token,
+    hash_refresh_token,
+)
+from app.models import User,RefreshToken
+
 from app.schemas.auth import RegisterRequest
-from app.core.security import hash_password, verify_password, create_access_token
 
 
 def register_user(request: RegisterRequest, db: Session) -> User:
@@ -31,6 +41,33 @@ def register_user(request: RegisterRequest, db: Session) -> User:
     return new_user
 
 
+def _create_tokens(user: User, db: Session) -> dict:
+    """Access + Refresh token pair banata hai. Internal helper function."""
+
+    # 1. Access token (short-lived, 30 min)
+    access_token = create_access_token(data={"sub": str(user.id)})
+
+    # 2. Refresh token (long-lived, 7 days)
+    raw_refresh_token = generate_refresh_token()
+    token_hash = hash_refresh_token(raw_refresh_token)
+    expires_at = datetime.now(timezone.utc) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+
+    # 3. Save refresh token hash in DB
+    db_refresh_token = RefreshToken(
+        user_id=user.id,
+        token_hash=token_hash,
+        expires_at=expires_at,
+    )
+    db.add(db_refresh_token)
+    db.commit()
+
+    return {
+        "access_token": access_token,
+        "refresh_token": raw_refresh_token,
+        "token_type": "bearer",
+    }
+
+
 def authenticate_user(email: str, password: str, db: Session) -> dict:
     # 1. Find user by email
     user = db.query(User).filter(User.email == email).first()
@@ -54,7 +91,63 @@ def authenticate_user(email: str, password: str, db: Session) -> dict:
             detail="Account is deactivated"
         )
 
-    # 4. Create access token
-    access_token = create_access_token(data={"sub": str(user.id)})
+    # 4. Create both tokens
+    return _create_tokens(user, db)
 
-    return {"access_token": access_token, "token_type": "bearer"}
+
+def refresh_access_token(refresh_token: str, db: Session) -> dict:
+    """Purana refresh token leke naya access + refresh token deta hai (ROTATION)."""
+
+    # 1. Hash the incoming token to find it in DB
+    token_hash = hash_refresh_token(refresh_token)
+
+    # 2. Find in DB
+    db_token = db.query(RefreshToken).filter(
+        RefreshToken.token_hash == token_hash,
+        RefreshToken.revoked == False,
+    ).first()
+
+    if not db_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token"
+        )
+
+    # 3. Check expiry
+    if db_token.expires_at < datetime.now(timezone.utc):
+        db_token.revoked = True
+        db.commit()
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token expired"
+        )
+
+    # 4. Revoke old token (rotation — har baar naya token milega)
+    db_token.revoked = True
+    db.commit()
+
+    # 5. Get user
+    user = db.query(User).filter(User.id == db_token.user_id).first()
+    if not user or not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found or deactivated"
+        )
+
+    # 6. Create new token pair
+    return _create_tokens(user, db)
+
+
+def logout_user(refresh_token: str, db: Session) -> None:
+    """Refresh token revoke karta hai — effectively logout."""
+
+    token_hash = hash_refresh_token(refresh_token)
+
+    db_token = db.query(RefreshToken).filter(
+        RefreshToken.token_hash == token_hash,
+        RefreshToken.revoked == False,
+    ).first()
+
+    if db_token:
+        db_token.revoked = True
+        db.commit()
