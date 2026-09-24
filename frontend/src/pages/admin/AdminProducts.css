@@ -1,0 +1,130 @@
+.admin-page-container {
+  color: #f8fafc;
+}
+
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.admin-page-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: #fff;
+}
+
+.admin-btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #4fd1c5;
+  color: #0f172a;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-btn-primary:hover {
+  background-color: #38b2ac;
+  transform: translateY(-2px);
+}
+
+.admin-table-container {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background-color: rgba(255, 255, 255, 0.05);
+  text-align: left;
+  padding: 15px 20px;
+  color: #a0aec0;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-table td {
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+
+.admin-table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.price-cell {
+  font-weight: 600;
+  color: #4fd1c5 !important;
+}
+
+.stock-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.stock-in {
+  background-color: rgba(72, 187, 120, 0.2);
+  color: #48bb78;
+}
+
+.stock-out {
+  background-color: rgba(245, 101, 101, 0.2);
+  color: #fc8181;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-btn {
+  color: #63b3ed;
+}
+
+.edit-btn:hover {
+  background-color: rgba(99, 179, 237, 0.15);
+}
+
+.delete-btn {
+  color: #fc8181;
+}
+
+.delete-btn:hover {
+  background-color: rgba(252, 129, 129, 0.15);
+}
+
+.admin-empty-table, .admin-loading {
+  text-align: center;
+  padding: 40px !important;
+  color: #a0aec0 !important;
+  font-size: 1.1rem;
+}

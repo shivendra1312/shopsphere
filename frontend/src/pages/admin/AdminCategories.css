@@ -1,0 +1,12 @@
+.category-form-card {
+  margin-bottom: 30px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(79, 209, 197, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.category-form-card h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #fff;
+}
