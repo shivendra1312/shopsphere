@@ -31,6 +31,16 @@ def get_products(
         category_id=category_id
     )
 
+@router.get("/{product_id}", response_model=ProductResponse)
+def get_product(product_id: int, db: Session = Depends(get_db)):
+    """
+    Get a single product by its ID.
+    """
+    from fastapi import HTTPException
+    product = product_service.get_product_by_id(db, product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
 
 @router.post("", response_model=ProductResponse, status_code=201, dependencies=[Depends(require_role([UserRole.ADMIN]))])
 def create_product(product_in: ProductCreate, db: Session = Depends(get_db)):

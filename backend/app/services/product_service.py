@@ -32,6 +32,9 @@ def get_products(
     products = query.offset(skip).limit(limit).all()
     return products
 
+def get_product_by_id(db: Session, product_id: int):
+    return db.query(Product).filter(Product.id == product_id).first()
+
 def create_product(db: Session, product_in: ProductCreate):
     # Convert schema to SQLAlchemy model
     new_product = Product(
