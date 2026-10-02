@@ -13,6 +13,10 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     REDIS_URL: str
+    
+    # Razorpay Settings (default empty string so it doesn't crash if missing in .env initially)
+    RAZORPAY_KEY_ID: str = ""
+    RAZORPAY_KEY_SECRET: str = ""
 
     model_config = SettingsConfigDict(
         env_file=".env",

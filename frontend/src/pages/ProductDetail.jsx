@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { productsAPI } from '../api/products';
+import { cartAPI, wishlistAPI } from '../api/cart';
+import { useAuth } from '../context/AuthContext';
+import { Heart } from 'lucide-react';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -10,6 +13,11 @@ const ProductDetail = () => {
   // 2. State variables
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [adding, setAdding] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [wAdding, setWAdding] = useState(false);
+  const [wAdded, setWAdded] = useState(false);
+  const { user } = useAuth();
 
   // 3. Data lana
   useEffect(() => {
@@ -53,12 +61,45 @@ const ProductDetail = () => {
         <div className="detail-bottom">
           <div className="detail-price">${product.price.toFixed(2)}</div>
           
-          <button 
-            className="add-to-cart-btn" 
-            disabled={product.stock === 0}
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button 
+              className="add-to-cart-btn" 
+              style={{ background: 'transparent', border: '1px solid #fc8181', color: '#fc8181', padding: '0 15px' }}
+              disabled={wAdding || !user}
+              onClick={async () => {
+                setWAdding(true);
+                try {
+                  await wishlistAPI.addToWishlist(product.id);
+                  setWAdded(true);
+                  setTimeout(() => setWAdded(false), 2000);
+                } catch (err) {
+                  console.error("Wishlist error", err);
+                }
+                setWAdding(false);
+              }}
+              title="Add to Wishlist"
+            >
+              <Heart size={20} fill={wAdded ? "#fc8181" : "none"} />
+            </button>
+
+            <button 
+              className="add-to-cart-btn" 
+              disabled={product.stock === 0 || adding || !user}
+            onClick={async () => {
+              setAdding(true);
+              try {
+                await cartAPI.addToCart(product.id, 1);
+                setAdded(true);
+                setTimeout(() => setAdded(false), 2000);
+              } catch (err) {
+                console.error("Add to cart failed", err);
+              }
+              setAdding(false);
+            }}
           >
-            {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
-          </button>
+            {product.stock === 0 ? "Out of Stock" : added ? "✓ Added!" : adding ? "Adding..." : !user ? "Login to Add" : "Add to Cart"}
+            </button>
+          </div>
         </div>
         
         <div style={{ color: product.stock < 5 ? '#ecc94b' : '#a0aec0', fontSize: '0.9rem' }}>

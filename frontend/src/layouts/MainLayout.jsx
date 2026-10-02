@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ShoppingBag, User, LogOut } from 'lucide-react';
+import { ShoppingBag, User, LogOut, ShoppingCart, Heart } from 'lucide-react';
 
 export default function MainLayout() {
   const { user, logout } = useAuth();
@@ -30,6 +30,13 @@ export default function MainLayout() {
               {user ? (
                 // Agar user logged in hai:
                 <>
+                  <Link to="/wishlist" style={{ color: '#fc8181', position: 'relative', padding: '0.5rem' }} title="Wishlist">
+                    <Heart size={22} />
+                  </Link>
+                  <Link to="/cart" style={{ color: '#e2e8f0', position: 'relative', padding: '0.5rem' }} title="Cart">
+                    <ShoppingCart size={22} />
+                  </Link>
+                  
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#e2e8f0', fontSize: '0.875rem', fontWeight: '500', marginRight: '1rem' }}>
                     <User size={18} />
                     <span>Hi, {user.first_name || 'User'}</span>

@@ -12,6 +12,8 @@ import Home from './pages/Home';
 import AdminProducts from './pages/admin/Products';
 import ProductForm from './pages/admin/ProductForm';
 import AdminCategories from './pages/admin/Categories';
+import Cart from './pages/Cart';
+import Wishlist from './pages/Wishlist';
 
 // Ek simple placeholder Profile page testing ke liye
 function Profile() {
@@ -39,6 +41,8 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/wishlist" element={<Wishlist />} />
           </Route>
 
           {/* AdminLayout ke andar saare Admin pages aayenge */}
