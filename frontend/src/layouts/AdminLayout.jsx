@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Package, FolderTree, LogOut, ArrowLeft } from 'lucide-react';
+import { LayoutDashboard, Package, FolderTree, LogOut, ArrowLeft, ShoppingBag } from 'lucide-react';
 import './AdminLayout.css';
 
 const AdminLayout = () => {
@@ -32,6 +32,11 @@ const AdminLayout = () => {
           <NavLink to="/admin/categories" className={({ isActive }) => isActive ? "admin-nav-link active" : "admin-nav-link"}>
             <FolderTree size={20} />
             Categories
+          </NavLink>
+
+          <NavLink to="/admin/orders" className={({ isActive }) => isActive ? "admin-nav-link active" : "admin-nav-link"}>
+            <ShoppingBag size={20} />
+            Orders
           </NavLink>
 
           <Link to="/" className="admin-nav-link" style={{ marginTop: '20px' }}>

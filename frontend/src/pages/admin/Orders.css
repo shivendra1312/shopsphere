@@ -1,0 +1,91 @@
+.admin-orders-page h1 {
+  font-size: 1.8rem;
+  color: #f7fafc;
+  margin-bottom: 25px;
+}
+
+.orders-table-wrapper {
+  overflow-x: auto;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.orders-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #a0aec0;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.orders-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  color: #cbd5e0;
+  vertical-align: middle;
+}
+
+.orders-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-PENDING   { background: rgba(236,201,75,0.15); color: #ecc94b; border: 1px solid rgba(236,201,75,0.3); }
+.status-PAID      { background: rgba(72,187,120,0.15); color: #48bb78; border: 1px solid rgba(72,187,120,0.3); }
+.status-SHIPPED   { background: rgba(66,153,225,0.15); color: #4299e1; border: 1px solid rgba(66,153,225,0.3); }
+.status-DELIVERED { background: rgba(79,209,197,0.15); color: #4fd1c5; border: 1px solid rgba(79,209,197,0.3); }
+.status-CANCELLED { background: rgba(252,129,129,0.15); color: #fc8181; border: 1px solid rgba(252,129,129,0.3); }
+
+/* Status Dropdown */
+.status-select {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.status-select:focus {
+  border-color: #4fd1c5;
+}
+
+.status-select option {
+  background: #1a202c;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 50px;
+  color: #a0aec0;
+}
+
+.order-items-list {
+  font-size: 0.82rem;
+  color: #a0aec0;
+  max-width: 200px;
+}
+
+.order-amount {
+  color: #4fd1c5;
+  font-weight: 700;
+}

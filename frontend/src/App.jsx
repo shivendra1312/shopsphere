@@ -12,8 +12,10 @@ import Home from './pages/Home';
 import AdminProducts from './pages/admin/Products';
 import ProductForm from './pages/admin/ProductForm';
 import AdminCategories from './pages/admin/Categories';
+import AdminOrders from './pages/admin/Orders';
 import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
+import Checkout from './pages/Checkout';
 
 // Ek simple placeholder Profile page testing ke liye
 function Profile() {
@@ -43,6 +45,7 @@ function App() {
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/checkout" element={<Checkout />} />
           </Route>
 
           {/* AdminLayout ke andar saare Admin pages aayenge */}
@@ -59,6 +62,7 @@ function App() {
             <Route path="products" element={<AdminProducts />} />
             <Route path="products/new" element={<ProductForm />} />
             <Route path="categories" element={<AdminCategories />} />
+            <Route path="orders" element={<AdminOrders />} />
           </Route>
 
         </Routes>

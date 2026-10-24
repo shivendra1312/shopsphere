@@ -57,3 +57,16 @@ def create_order(db: Session, user_id: int, address_id: int):
 def get_user_orders(db: Session, user_id: int):
     # User ko uske saare orders dikhane ke liye (Order History)
     return db.query(Order).filter(Order.user_id == user_id).order_by(Order.created_at.desc()).all()
+
+def get_all_orders(db: Session):
+    # Admin ke liye: platform ke SAARE orders
+    return db.query(Order).order_by(Order.created_at.desc()).all()
+
+def update_order_status(db: Session, order_id: int, new_status: OrderStatus):
+    order = db.query(Order).filter(Order.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    order.status = new_status
+    db.commit()
+    db.refresh(order)
+    return order

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cartAPI } from '../api/cart';
 import { Trash2, ShoppingBag } from 'lucide-react';
 import './Cart.css';
@@ -117,9 +117,9 @@ const Cart = () => {
           <span>Total</span>
           <span>${totalPrice.toFixed(2)}</span>
         </div>
-        <button className="checkout-btn">
-          Proceed to Checkout
-        </button>
+        <Link to="/checkout" className="checkout-btn" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+          Proceed to Checkout →
+        </Link>
       </div>
     </div>
   );
