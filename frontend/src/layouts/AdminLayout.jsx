@@ -24,6 +24,11 @@ const AdminLayout = () => {
         
         <nav className="admin-nav">
           {/* NavLink automatically active class add karta hai */}
+          <NavLink to="/admin" end className={({ isActive }) => isActive ? "admin-nav-link active" : "admin-nav-link"}>
+            <LayoutDashboard size={20} />
+            Dashboard
+          </NavLink>
+
           <NavLink to="/admin/products" className={({ isActive }) => isActive ? "admin-nav-link active" : "admin-nav-link"}>
             <Package size={20} />
             Products

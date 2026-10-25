@@ -13,6 +13,7 @@ import AdminProducts from './pages/admin/Products';
 import ProductForm from './pages/admin/ProductForm';
 import AdminCategories from './pages/admin/Categories';
 import AdminOrders from './pages/admin/Orders';
+import AdminDashboard from './pages/admin/Dashboard';
 import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
 import Checkout from './pages/Checkout';
@@ -57,8 +58,8 @@ function App() {
               </AdminRoute>
             }
           >
-            {/* Jab koi sirf /admin pe aayega, usko products dikhayenge */}
-            <Route index element={<AdminProducts />} />
+            {/* Jab koi sirf /admin pe aayega, usko Dashboard dikhayenge */}
+            <Route index element={<AdminDashboard />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="products/new" element={<ProductForm />} />
             <Route path="categories" element={<AdminCategories />} />
