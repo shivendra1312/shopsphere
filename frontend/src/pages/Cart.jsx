@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { cartAPI } from '../api/cart';
-import { Trash2, ShoppingBag } from 'lucide-react';
+import { couponsAPI } from '../api/coupons';
+import { Trash2, ShoppingBag, Tag } from 'lucide-react';
 import './Cart.css';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Coupon states
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState('');
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
 
   // 1. Cart data lana
   const fetchCart = async () => {
@@ -54,6 +61,33 @@ const Cart = () => {
   }, 0);
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  const handleApplyCoupon = async (e) => {
+    e.preventDefault();
+    if (!couponCode.trim()) {
+      setCouponError("Please enter a coupon code");
+      return;
+    }
+    setCouponError('');
+    setApplyingCoupon(true);
+    try {
+      const res = await couponsAPI.applyCoupon(couponCode, totalPrice);
+      setAppliedCoupon(res);
+    } catch (err) {
+      const msg = err.response?.data?.detail || "Invalid coupon code";
+      setCouponError(msg);
+      setAppliedCoupon(null);
+    }
+    setApplyingCoupon(false);
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+    setCouponError('');
+  };
+
+  const finalTotal = appliedCoupon ? appliedCoupon.final_amount : totalPrice;
 
   // 5. Loading state
   if (loading) {
@@ -113,10 +147,53 @@ const Cart = () => {
           <span>Items in cart</span>
           <span>{totalItems}</span>
         </div>
-        <div className="summary-row total">
-          <span>Total</span>
+        <div className="summary-row">
+          <span>Subtotal</span>
           <span>${totalPrice.toFixed(2)}</span>
         </div>
+
+        {/* Coupon Section */}
+        <div className="coupon-section">
+          {!appliedCoupon ? (
+            <form className="coupon-form" onSubmit={handleApplyCoupon}>
+              <input
+                className="coupon-input"
+                placeholder="ENTER COUPON CODE"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="coupon-btn"
+                disabled={applyingCoupon}
+              >
+                {applyingCoupon ? "Applying..." : "Apply"}
+              </button>
+            </form>
+          ) : (
+            <div className="coupon-success-msg">
+              <span>🎉 <strong>{appliedCoupon.code}</strong> applied (-{appliedCoupon.discount_percent}%)</span>
+              <button className="coupon-remove-btn" onClick={handleRemoveCoupon}>Remove</button>
+            </div>
+          )}
+
+          {couponError && (
+            <div className="coupon-error-msg">⚠️ {couponError}</div>
+          )}
+        </div>
+
+        {appliedCoupon && (
+          <div className="summary-row discount">
+            <span>Discount ({appliedCoupon.discount_percent}%)</span>
+            <span>-${appliedCoupon.discount_amount.toFixed(2)}</span>
+          </div>
+        )}
+
+        <div className="summary-row total">
+          <span>Total</span>
+          <span>${finalTotal.toFixed(2)}</span>
+        </div>
+
         <Link to="/checkout" className="checkout-btn" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
           Proceed to Checkout →
         </Link>

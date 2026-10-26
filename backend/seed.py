@@ -32,6 +32,17 @@ def seed_db():
             print("Successfully added 2 categories and 5 products!")
         else:
             print("Database me already products hain.")
+
+        # Seed initial test coupons
+        from app.models.coupon import Coupon
+        if db.query(Coupon).count() == 0:
+            print("Coupons add kar raha hu...")
+            c1 = Coupon(code="SAVE10", discount_percent=10.0, min_order_amount=0.0)
+            c2 = Coupon(code="WELCOME20", discount_percent=20.0, min_order_amount=100.0)
+            c3 = Coupon(code="SHOPSPHERE50", discount_percent=50.0, min_order_amount=500.0)
+            db.add_all([c1, c2, c3])
+            db.commit()
+            print("Coupons SAVE10, WELCOME20, SHOPSPHERE50 added!")
     except Exception as e:
         print("Error aaya:", e)
     finally:
