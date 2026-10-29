@@ -19,5 +19,4 @@ class CartItemResponse(BaseModel):
     quantity: int
     product: ProductResponse  # Ye line magic hai! Isse frontend ko direct product ki image aur price mil jayegi
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}

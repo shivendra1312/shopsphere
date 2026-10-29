@@ -9,3 +9,7 @@ python-jose[cryptography]
 python-multipart
 razorpay
 redis
+# Testing
+pytest
+pytest-cov
+httpx

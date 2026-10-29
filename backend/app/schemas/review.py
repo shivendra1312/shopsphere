@@ -7,8 +7,7 @@ class ReviewUser(BaseModel):
     first_name: Optional[str] = None
     email: str
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class ReviewCreate(BaseModel):
     rating: int = Field(..., ge=1, le=5)
@@ -23,5 +22,4 @@ class ReviewResponse(BaseModel):
     created_at: datetime
     user: Optional[ReviewUser] = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}

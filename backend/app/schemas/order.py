@@ -16,8 +16,7 @@ class OrderItemResponse(BaseModel):
     price: float
     product: Optional[ProductResponse] = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class OrderResponse(BaseModel):
     id: int
@@ -32,5 +31,4 @@ class OrderResponse(BaseModel):
     address: Optional[AddressResponse] = None
     items: List[OrderItemResponse] = []
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}

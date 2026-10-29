@@ -48,3 +48,14 @@ def create_product(product_in: ProductCreate, db: Session = Depends(get_db)):
     Create a new product. Only ADMIN can do this.
     """
     return product_service.create_product(db, product_in)
+
+@router.delete("/{product_id}", status_code=204, dependencies=[Depends(require_role([UserRole.ADMIN]))])
+def delete_product(product_id: int, db: Session = Depends(get_db)):
+    """
+    Delete a product. Only ADMIN can do this.
+    """
+    from fastapi import HTTPException
+    deleted = product_service.delete_product(db, product_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return None

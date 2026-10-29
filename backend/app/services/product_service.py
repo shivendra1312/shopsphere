@@ -36,6 +36,17 @@ def get_product_by_id(db: Session, product_id: int):
     return db.query(Product).filter(Product.id == product_id).first()
 
 def create_product(db: Session, product_in: ProductCreate):
+    from app.models.category import Category
+    from fastapi import HTTPException, status
+
+    # Verify category exists
+    category = db.query(Category).filter(Category.id == product_in.category_id).first()
+    if not category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found"
+        )
+
     # Convert schema to SQLAlchemy model
     new_product = Product(
         title=product_in.title,
@@ -49,3 +60,11 @@ def create_product(db: Session, product_in: ProductCreate):
     db.commit()
     db.refresh(new_product)
     return new_product
+
+def delete_product(db: Session, product_id: int):
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if not product:
+        return None
+    db.delete(product)
+    db.commit()
+    return product

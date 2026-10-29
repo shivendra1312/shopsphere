@@ -13,5 +13,4 @@ class WishlistItemResponse(BaseModel):
     product_id: int
     product: ProductResponse  # Product details include karenge
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
